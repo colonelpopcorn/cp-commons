@@ -1,31 +1,41 @@
 import { Request, Response } from 'express';
-import { AxiosRequestConfig, default as axios } from 'axios';
+import { AxiosRequestConfig, default as axios, Method } from 'axios';
 
 export const forwardRoute = (
   req: Request,
   res: Response
 ) => {
-  const requestConfig: AxiosRequestConfig = lookupConfig({ ...req.body, method: req.method });
+  let initialConf: AxiosRequestConfig = {};
+  if (req.method === 'GET') {
+      initialConf = {
+          params: { ...req.query },
+          url: req.query.url as string,
+      };
+      delete initialConf.params.url;
+  } else {
+      initialConf = req.body;
+  }
+  const requestConfig: AxiosRequestConfig = lookupConfig({ ...initialConf, method: req.method as Method });
   try {
-    axios(requestConfig).then(remoteRes => res.json(remoteRes));
+    axios(requestConfig).then(({ data }) => res.json(data));
   } catch (err) {
     console.error(err);
-    throw err;
+    res.json({err});
   }
 };
 
 const lookupConfig = (requestConf: AxiosRequestConfig): AxiosRequestConfig => {
     const newRequestConf = { ...requestConf };
-    if (["GET"].includes(requestConf.method)) {
+    if (requestConf.method === 'GET') {
         for (const [key, val] of Object.entries(requestConf.params)) {
             if ((val as string).includes("_LOOKUP_")) {
-                newRequestConf[key] = lookupInEnv(val as string);
+                newRequestConf.params[key] = lookupInEnv(val as string);
             }
         }
     } else {
         for (const [key, val] of Object.entries(requestConf.data)) {
             if ((val as string).includes("_LOOKUP_")) {
-                newRequestConf[key] = lookupInEnv(val as string)
+                newRequestConf.data[key] = lookupInEnv(val as string)
             }
         }
     }
