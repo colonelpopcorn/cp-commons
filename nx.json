@@ -22,11 +22,7 @@
       }
     }
   },
-  "projects": {
-    "api-forward": {
-      "tags": []
-    }
-  },
+  "projects": {},
   "workspaceLayout": {
     "appsDir": "packages",
     "libsDir": "packages"

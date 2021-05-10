@@ -1,68 +1,7 @@
 {
   "version": 2,
-  "projects": {
-    "api-forward": {
-      "root": "packages/api-forward",
-      "sourceRoot": "packages/api-forward/src",
-      "projectType": "application",
-      "prefix": "api-forward",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/packages/api-forward",
-            "main": "packages/api-forward/src/main.ts",
-            "tsConfig": "packages/api-forward/tsconfig.app.json",
-            "assets": [
-              "packages/api-forward/src/assets"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "packages/api-forward/src/environments/environment.ts",
-                  "with": "packages/api-forward/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api-forward:build"
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "packages/api-forward/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/api-forward"
-          ],
-          "options": {
-            "jestConfig": "packages/api-forward/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    }
-  },
+  "projects": {},
   "cli": {
     "defaultCollection": "@nrwl/express"
-  },
-  "defaultProject": "api-forward"
+  }
 }
